@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spreadsheet Test using PublicGoogleSheetsParser</title>
+    <meta charset="utf-8" />
+
+    <script src="../public-google-sheets-parser/dist/index.js"></script>
+    <script>
+      const publicSpreadsheetUrl =
+        'https://docs.google.com/spreadsheets/d/1DHnd8uO59UTxq2AtmtzCytdkcCY3Q5RYNwSDRXLJqaI/pub?output=csv';
+
+      const publicSpreadsheetId =
+        '1DHnd8uO59UTxq2AtmtzCytdkcCY3Q5RYNwSDRXLJqaI';
+
+      const parser = new PublicGoogleSheetsParser(publicSpreadsheetId);
+      parser.parse().then((data) => showInfo(data));
+
+      function showInfo(data) {
+        console.log('Successfully processed ' + data.length + ' rows! with PublicGoogleSheetsParser');
+        console.log('Data=' + JSON.stringify(data));
+      }
+
+    </script>
+  </head>
+  <body>
+    <p>Spreadsheet Test using PublicGoogleSheetsParser</p>
+  </body>
+</html>

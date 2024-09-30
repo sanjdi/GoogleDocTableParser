@@ -1,0 +1,322 @@
+<html>
+  <head> </head>
+  <body>
+    <div id="t1">
+      <table id="t2" class="c5">
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">x-coordinate</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">Character</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">y-coordinate</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">0</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">█</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">0</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">0</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">█</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">1</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">0</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">█</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">1</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">▀</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">1</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">1</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">▀</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">▀</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">1</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">▀</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+        </tr>
+        <tr class="c0">
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">3</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">▀</span></p>
+          </td>
+          <td class="c3" colspan="1" rowspan="1">
+            <p class="c2"><span class="c1">2</span></p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      var elementqqq = document.getElementById('t2');
+      // console.log(element);
+      var html = elementqqq.innerHTML;
+      // console.log(html);
+
+      function htmlTableToJson(inputString) {
+        // Create a new DOMParser instance
+        const parser = new DOMParser();
+
+        // Parse the input HTML string
+        const doc = parser.parseFromString(inputString, 'text/html');
+
+        // Find the table element
+        const table = doc.querySelector('table');
+
+        // Initialize an array to hold the JSON output
+        const jsonOutput = [];
+
+        if (table) {
+          // Extract headers
+          const headers = Array.from(
+            table.querySelectorAll('tr:first-child th, tr:first-child td')
+          ).map((th) => th.textContent.trim());
+
+          // Add header row to JSON output
+          if (headers.length) {
+            const headerRow = {};
+            headers.forEach((header, index) => {
+              headerRow[String.fromCharCode(65 + index)] = header;
+            });
+            jsonOutput.push(headerRow);
+          }
+
+          // Extract data rows
+          const rows = table.querySelectorAll('tbody > tr');
+          rows.forEach((row) => {
+            const cells = Array.from(row.querySelectorAll('td')).map((td) =>
+              td.textContent.trim()
+            );
+            if (cells.length) {
+              const dataRow = {};
+              cells.forEach((cell, index) => {
+                dataRow[String.fromCharCode(65 + index)] = cell;
+              });
+              jsonOutput.push(dataRow);
+            }
+          });
+        }
+
+        return jsonOutput;
+      }
+
+      /*
+    function htmlTableBodyToJson(tbody) {
+        // Initialize an array to hold the JSON output
+        const jsonOutput = [];
+        
+        if (tbody) {
+            // Extract headers from the first row
+            const headers = Array.from(tbody.querySelectorAll('tr:first-child td')).map(td => 
+                td.textContent.trim()
+            );
+    
+            // Add header row to JSON output
+            if (headers.length) {
+                const headerRow = {};
+                headers.forEach((header, index) => {
+                    headerRow[String.fromCharCode(65 + index)] = header;
+                });
+                jsonOutput.push(headerRow);
+            }
+    
+            // Extract data rows
+            const rows = tbody.querySelectorAll('tr:not(:first-child)');
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td')).map(td => 
+                    td.textContent.trim()
+                );
+                if (cells.length) {
+                    const dataRow = {};
+                    cells.forEach((cell, index) => {
+                        dataRow[String.fromCharCode(65 + index)] = cell;
+                    });
+                    jsonOutput.push(dataRow);
+                }
+            });
+        }
+    
+        return jsonOutput;
+    } */
+
+      function htmlTableBodyToJson2(tbody) {
+        // Initialize the output JSON structure
+        const jsonOutput = {
+          status: 'ok',
+          table: {
+            cols: [],
+            rows: [],
+            parsedNumHeaders: 0,
+          },
+        };
+
+        if (tbody) {
+          // Extract headers from the first row
+          const headers = Array.from(
+            tbody.querySelectorAll('tr:first-child td')
+          ).map((td) => td.textContent.trim());
+
+          // Add header columns to JSON output
+          if (headers.length) {
+            jsonOutput.table.cols = headers.map((header, index) => ({
+              id: String.fromCharCode(65 + index),
+              label: header,
+              type: index === 0 || index === 2 ? 'number' : 'string', // Guess type based on header
+              pattern: index === 0 || index === 2 ? 'General' : undefined,
+            }));
+            jsonOutput.table.parsedNumHeaders = 0; // No specific parsedNumHeaders info, default to 0
+          }
+
+          // Extract data rows
+          const rows = tbody.querySelectorAll('tr:not(:first-child)');
+          jsonOutput.table.rows = Array.from(rows).map((row) => {
+            const cells = Array.from(row.querySelectorAll('td')).map((td) => ({
+              v: parseFloat(td.textContent.trim()) || td.textContent.trim(),
+              f: parseFloat(td.textContent.trim())
+                ? td.textContent.trim()
+                : undefined,
+            }));
+            return { c: cells };
+          });
+        }
+
+        return jsonOutput;
+      }
+
+      console.log(htmlTableBodyToJson2(elementqqq));
+
+      /*
+      function mapDOM(element, json) {
+        var treeObject = {};
+
+        // If string convert to document Node
+        if (typeof element === 'string') {
+          if (window.DOMParser) {
+            parser = new DOMParser();
+            docNode = parser.parseFromString(element, 'text/xml');
+          } else {
+            // Microsoft strikes again
+            docNode = new ActiveXObject('Microsoft.XMLDOM');
+            docNode.async = false;
+            docNode.loadXML(element);
+          }
+          element = docNode.firstChild;
+        }
+
+        //Recursively loop through DOM elements and assign properties to object
+        function treeHTML(element, object) {
+          object['type'] = element.nodeName;
+          var nodeList = element.childNodes;
+          if (nodeList != null) {
+            if (nodeList.length) {
+              object['content'] = [];
+              for (var i = 0; i < nodeList.length; i++) {
+                if (nodeList[i].nodeType == 3) {
+                  object['content'].push(nodeList[i].nodeValue);
+                } else {
+                  object['content'].push({});
+                  treeHTML(
+                    nodeList[i],
+                    object['content'][object['content'].length - 1]
+                  );
+                }
+              }
+            }
+          }
+          if (element.attributes != null) {
+            if (element.attributes.length) {
+              object['attributes'] = {};
+              for (var i = 0; i < element.attributes.length; i++) {
+                object['attributes'][element.attributes[i].nodeName] =
+                  element.attributes[i].nodeValue;
+              }
+            }             
+          }
+        }
+        treeHTML(element, treeObject);
+
+        return json ? JSON.stringify(treeObject) : treeObject;
+      }
+
+      let json = mapDOM(elementqqq, true);
+      console.log(json);
+      */
+
+      // const documentJson = JSON.stringify(html, null, 2);
+      // console.log(documentJson);
+
+      /* const Elem = e => ({
+        tagName: 
+          e.tagName,
+        textContent:
+          e.textContent,
+        attributes:
+          Array.from(e.attributes, ({name, value}) => [name, value]),
+        children:
+          Array.from(e.children, Elem)
+      })
+      
+      const html2json = e =>
+        JSON.stringify(Elem(e), null, '  ')
+        
+      console.log(html2json(element)) */
+    </script>
+  </body>
+</html>
